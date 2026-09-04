@@ -49,15 +49,12 @@
 }
 
 .navbar__logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
   flex-shrink: 0;
+  box-shadow: 0 0 0 1px var(--border);
 }
 
 .navbar__brand-text {
@@ -880,8 +877,12 @@
   gap: 8px;
 }
 
-.footer__brand .material-symbols-outlined {
-  color: var(--accent);
+.footer__logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--border);
 }
 
 .footer__copy {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import logo from '../assets/dum-dost-logo.png'
 import { buildWhatsAppLink, greetingMessage } from '../lib/whatsapp'
 import { useOrder } from '../order/useOrder'
 import { useRipple } from '../hooks/useRipple'
@@ -35,9 +36,7 @@ export default function Navbar() {
 
       <div className="navbar__inner">
         <a href="#top" className="navbar__brand">
-          <span className="navbar__logo" aria-hidden="true">
-            <span className="material-symbols-outlined">ramen_dining</span>
-          </span>
+          <img src={logo} alt="Dum Dost" className="navbar__logo" />
           <span className="navbar__brand-text">
             <span className="navbar__brand-name">Dum Dost</span>
             <span className="navbar__brand-sub">Slow-cooked. Fast friendship.</span>

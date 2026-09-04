@@ -1,11 +1,11 @@
+import logo from '../assets/dum-dost-logo.png'
+
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer__inner">
         <div className="footer__brand">
-          <span className="material-symbols-outlined" aria-hidden="true">
-            ramen_dining
-          </span>
+          <img src={logo} alt="Dum Dost" className="footer__logo" />
           Dum Dost
         </div>
         <p>Slow-cooked biryani, made by 3 friends. Order via WhatsApp.</p>
