@@ -735,7 +735,7 @@
 .about__values {
   max-width: 1080px;
   margin: 0 auto 64px;
-  display: grid;
+  display: none;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
