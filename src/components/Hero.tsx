@@ -1,17 +1,33 @@
-import combinedImg from '../assets/combined-hero.jpg'
-import BiryaniParticles from './BiryaniParticles'
-import { buildWhatsAppLink, greetingMessage } from '../lib/whatsapp'
-import { useRipple } from '../hooks/useRipple'
+import combinedImg from "../assets/combined-hero.png";
+import BiryaniParticles from "./BiryaniParticles";
+import { buildWhatsAppLink, greetingMessage } from "../lib/whatsapp";
+import { useRipple } from "../hooks/useRipple";
 
 const trustItems = [
-  { icon: 'skillet', title: 'Cooked Fresh, Per Order', text: 'No freezing, no reheating — every pot is made after you message us.' },
-  { icon: 'package_2', title: 'Sealed & Spill-Proof', text: 'Packed hot, straight from the pot into leak-proof containers.' },
-  { icon: 'eco', title: 'Honest Ingredients', text: 'Real basmati, real spices, no artificial colours or shortcuts.' },
-  { icon: 'chat', title: 'One WhatsApp Away', text: 'No app, no signup — just message us and we take it from there.' },
-]
+  {
+    icon: "skillet",
+    title: "Cooked Fresh, Per Order",
+    text: "No freezing, no reheating — every pot is made after you message us.",
+  },
+  {
+    icon: "package_2",
+    title: "Sealed & Spill-Proof",
+    text: "Packed hot, straight from the pot into leak-proof containers.",
+  },
+  {
+    icon: "eco",
+    title: "Honest Ingredients",
+    text: "Real basmati, real spices, no artificial colours or shortcuts.",
+  },
+  {
+    icon: "chat",
+    title: "One WhatsApp Away",
+    text: "No app, no signup — just message us and we take it from there.",
+  },
+];
 
 export default function Hero() {
-  const onRipple = useRipple()
+  const onRipple = useRipple();
 
   return (
     <section id="top" className="hero">
@@ -35,8 +51,8 @@ export default function Hero() {
           </span>
 
           <h1 className="hero__title">
-            Real <span className="hero__title-accent">Dum Biryani</span>,
-            made by 3 friends who mean it.
+            Real <span className="hero__title-accent">Dum Biryani</span>, made
+            by 3 friends who mean it.
           </h1>
 
           <p className="hero__subtitle">
@@ -58,7 +74,11 @@ export default function Hero() {
               </span>
               Order on WhatsApp
             </a>
-            <a className="btn btn--ghost btn--large ripple-btn" href="#menu" onClick={onRipple}>
+            <a
+              className="btn btn--ghost btn--large ripple-btn"
+              href="#menu"
+              onClick={onRipple}
+            >
               View Menu
             </a>
           </div>
@@ -79,5 +99,5 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

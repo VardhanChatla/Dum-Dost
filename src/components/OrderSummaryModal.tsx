@@ -3,6 +3,7 @@ import { dishes } from '../data/dishes'
 import { useOrder } from '../order/useOrder'
 import { dishPrice, parseLineItemKey, portionLabel } from '../order/lineItem'
 import { useRipple } from '../hooks/useRipple'
+import AddOns from './AddOns'
 
 export default function OrderSummaryModal() {
   const { quantities, totalCount, totalPrice, addItem, removeItem, whatsAppLink, summaryOpen, closeSummary } =
@@ -56,39 +57,45 @@ export default function OrderSummaryModal() {
           </button>
         </div>
 
-        {lineItems.length === 0 ? (
-          <div className="summary-card__empty">
-            <span className="material-symbols-outlined">ramen_dining</span>
-            <p>Your order is empty. Add a biryani to get started!</p>
-          </div>
-        ) : (
-          <div className="summary-card__list">
-            {lineItems.map(({ key, dish, portion, qty }) => {
-              const unitPrice = dishPrice(dish, portion)
-              return (
-                <div className="summary-item" key={key}>
-                  <img src={dish.image} alt={dish.name} className="summary-item__image" />
-                  <div className="summary-item__info">
-                    <strong>{dish.name}</strong>
-                    <span className="summary-item__portion">{portionLabel(portion)} · ₹{unitPrice} each</span>
-                  </div>
-                  <div className="summary-item__controls">
-                    <div className="order-bar__stepper">
-                      <button type="button" aria-label={`Remove one ${dish.name} ${portionLabel(portion)}`} onClick={() => removeItem(key)}>
-                        <span className="material-symbols-outlined">remove</span>
-                      </button>
-                      <span>{qty}</span>
-                      <button type="button" aria-label={`Add one ${dish.name} ${portionLabel(portion)}`} onClick={() => addItem(dish.id, portion)}>
-                        <span className="material-symbols-outlined">add</span>
-                      </button>
+        <div className="summary-card__scroll">
+          {lineItems.length === 0 ? (
+            <div className="summary-card__empty">
+              <span className="material-symbols-outlined">ramen_dining</span>
+              <p>Your order is empty. Add a biryani to get started!</p>
+            </div>
+          ) : (
+            <>
+              <div className="summary-card__list">
+                {lineItems.map(({ key, dish, portion, qty }) => {
+                  const unitPrice = dishPrice(dish, portion)
+                  return (
+                    <div className="summary-item" key={key}>
+                      <img src={dish.image} alt={dish.name} className="summary-item__image" />
+                      <div className="summary-item__info">
+                        <strong>{dish.name}</strong>
+                        <span className="summary-item__portion">{portionLabel(portion)} · ₹{unitPrice} each</span>
+                      </div>
+                      <div className="summary-item__controls">
+                        <div className="order-bar__stepper">
+                          <button type="button" aria-label={`Remove one ${dish.name} ${portionLabel(portion)}`} onClick={() => removeItem(key)}>
+                            <span className="material-symbols-outlined">remove</span>
+                          </button>
+                          <span>{qty}</span>
+                          <button type="button" aria-label={`Add one ${dish.name} ${portionLabel(portion)}`} onClick={() => addItem(dish.id, portion)}>
+                            <span className="material-symbols-outlined">add</span>
+                          </button>
+                        </div>
+                        <span className="summary-item__line-price">₹{unitPrice * qty}</span>
+                      </div>
                     </div>
-                    <span className="summary-item__line-price">₹{unitPrice * qty}</span>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
+                  )
+                })}
+              </div>
+
+              <AddOns />
+            </>
+          )}
+        </div>
 
         <div className="summary-card__footer">
           <div className="summary-card__total">

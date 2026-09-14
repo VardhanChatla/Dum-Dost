@@ -3,10 +3,13 @@ import type { Portion } from '../data/dishes'
 
 export interface OrderContextValue {
   quantities: Record<string, number>
+  addOnQuantities: Record<string, number>
   totalCount: number
   totalPrice: number
   addItem: (dishId: string, portion: Portion) => void
   removeItem: (lineKey: string) => void
+  addAddOn: (addOnId: string) => void
+  removeAddOn: (addOnId: string) => void
   whatsAppLink: string
   summaryOpen: boolean
   openSummary: () => void

@@ -5,7 +5,7 @@ import { useReveal } from '../hooks/useReveal'
 import { useRipple } from '../hooks/useRipple'
 import { useTilt } from '../hooks/useTilt'
 import { useOrder } from '../order/useOrder'
-import { dishPrice, lineItemKey, portionLabel } from '../order/lineItem'
+import { dishOriginalPrice, dishPrice, lineItemKey, portionLabel } from '../order/lineItem'
 import { useToast } from './useToast'
 
 export default function DishCard({ dish, index }: { dish: Dish; index: number }) {
@@ -18,6 +18,9 @@ export default function DishCard({ dish, index }: { dish: Dish; index: number })
   const [justAdded, setJustAdded] = useState(false)
 
   const price = dishPrice(dish, portion)
+  const originalPrice = dishOriginalPrice(dish, portion)
+  const hasDiscount = originalPrice !== undefined && originalPrice > price
+  const discountPercent = hasDiscount ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0
 
   const handleAdd = (event: MouseEvent<HTMLButtonElement>) => {
     onRipple(event)
@@ -58,19 +61,35 @@ export default function DishCard({ dish, index }: { dish: Dish; index: number })
             className={portion === 'half' ? 'is-active' : ''}
             onClick={() => setPortion('half')}
           >
-            Half <span>₹{dish.priceHalf}</span>
+            Half{' '}
+            <span>
+              {dish.originalPriceHalf !== undefined && dish.originalPriceHalf > dish.priceHalf && (
+                <s className="portion-toggle__was">₹{dish.originalPriceHalf}</s>
+              )}
+              ₹{dish.priceHalf}
+            </span>
           </button>
           <button
             type="button"
             className={portion === 'full' ? 'is-active' : ''}
             onClick={() => setPortion('full')}
           >
-            Full <span>₹{dish.priceFull}</span>
+            Full{' '}
+            <span>
+              {dish.originalPriceFull !== undefined && dish.originalPriceFull > dish.priceFull && (
+                <s className="portion-toggle__was">₹{dish.originalPriceFull}</s>
+              )}
+              ₹{dish.priceFull}
+            </span>
           </button>
         </div>
 
         <div className="dish-card__meta">
-          <span className="dish-card__price">₹{price}</span>
+          <span className="dish-card__price-wrap">
+            {hasDiscount && <s className="dish-card__price-was">₹{originalPrice}</s>}
+            <span className="dish-card__price">₹{price}</span>
+            {hasDiscount && <span className="dish-card__discount-badge">{discountPercent}% OFF</span>}
+          </span>
           <span className="dish-card__spice" title="Spice level">
             {Array.from({ length: 3 }, (_, i) => (
               <span

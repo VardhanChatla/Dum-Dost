@@ -16,3 +16,7 @@ export function portionLabel(portion: Portion): string {
 export function dishPrice(dish: Dish, portion: Portion): number {
   return portion === 'half' ? dish.priceHalf : dish.priceFull
 }
+
+export function dishOriginalPrice(dish: Dish, portion: Portion): number | undefined {
+  return portion === 'half' ? dish.originalPriceHalf : dish.originalPriceFull
+}

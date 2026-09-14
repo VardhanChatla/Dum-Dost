@@ -1,4 +1,4 @@
-import type { Dish } from "../data/dishes";
+import type { AddOn, Dish } from "../data/dishes";
 import { dishPrice, parseLineItemKey, portionLabel } from "../order/lineItem";
 
 const WHATSAPP_NUMBER = "919987008585";
@@ -18,9 +18,11 @@ export function dishMessage(dishName: string): string {
 export function orderSummaryMessage(
   dishes: Dish[],
   quantities: Record<string, number>,
+  addOns: AddOn[] = [],
+  addOnQuantities: Record<string, number> = {},
 ): string {
-  const lines: string[] = [];
-  let total = 0;
+  const dishLines: string[] = [];
+  let dishTotal = 0;
 
   for (const [key, qty] of Object.entries(quantities)) {
     if (qty <= 0) continue;
@@ -30,19 +32,56 @@ export function orderSummaryMessage(
 
     const unitPrice = dishPrice(dish, portion);
     const lineTotal = unitPrice * qty;
-    total += lineTotal;
-    lines.push(
+    dishTotal += lineTotal;
+    dishLines.push(
       `• ${dish.name} (${portionLabel(portion)}) x${qty} — ₹${lineTotal}`,
     );
   }
 
-  return [
-    `Hi Dum Dost! I'd like to place this order:`,
-    ...lines,
-    ``,
-    `Estimated total: ₹${total}`,
+  const addOnLines: string[] = [];
+  let addOnTotal = 0;
+
+  for (const [addOnId, qty] of Object.entries(addOnQuantities)) {
+    if (qty <= 0) continue;
+    const addOn = addOns.find((a) => a.id === addOnId);
+    if (!addOn) continue;
+
+    const lineTotal = addOn.price * qty;
+    addOnTotal += lineTotal;
+    addOnLines.push(`• ${addOn.name} x${qty} — ₹${lineTotal}`);
+  }
+
+  const sections = [`Hi Dum Dost! I'd like to place this order:`, ``];
+
+  if (dishLines.length > 0) {
+    sections.push(
+      `*Dishes :*`,
+      ...dishLines,
+      `—————————————————————`,
+      `*Dishes total: ₹${dishTotal}*`,
+      ``,
+    );
+  }
+
+  if (addOnLines.length > 0) {
+    sections.push(
+      `*Add-ons :*`,
+      ...addOnLines,
+      `—————————————————————`,
+      `*Add-ons total: ₹${addOnTotal}*`,
+      ``,
+    );
+  }
+
+  sections.push(
+    `==========================`,
+    `*Overall total: ₹${dishTotal + addOnTotal}*`,
+    `==========================`,
+    ` `,
     `Could you confirm availability & delivery details?`,
-  ].join("\n");
+  );
+
+  return sections.join("\n");
 }
 
 export function partyOrderMessage(): string {

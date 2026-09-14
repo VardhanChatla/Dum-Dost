@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
-import { dishes } from '../data/dishes'
+import { addOns, dishes } from '../data/dishes'
 import { useOrder } from '../order/useOrder'
 import { useRipple } from '../hooks/useRipple'
 import { parseLineItemKey, portionLabel } from '../order/lineItem'
 
 export default function OrderBar() {
-  const { quantities, totalCount, totalPrice, whatsAppLink, openSummary } = useOrder()
+  const { quantities, addOnQuantities, totalCount, totalPrice, whatsAppLink, openSummary } = useOrder()
   const onRipple = useRipple()
 
   useEffect(() => {
@@ -24,6 +24,14 @@ export default function OrderBar() {
     })
     .filter((item): item is NonNullable<typeof item> => item !== null)
 
+  const addOnItems = Object.entries(addOnQuantities)
+    .filter(([, qty]) => qty > 0)
+    .map(([addOnId, qty]) => {
+      const addOn = addOns.find((a) => a.id === addOnId)
+      return addOn ? { addOnId, addOn, qty } : null
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+
   return (
     <div id="order-bar" className="order-bar">
       <div className="order-bar__inner">
@@ -31,6 +39,11 @@ export default function OrderBar() {
           {lineItems.map(({ key, dish, portion, qty }) => (
             <span className="order-bar__chip" key={key}>
               {dish.name} <em>{portionLabel(portion)}</em> ×{qty}
+            </span>
+          ))}
+          {addOnItems.map(({ addOnId, addOn, qty }) => (
+            <span className="order-bar__chip" key={addOnId}>
+              {addOn.name} ×{qty}
             </span>
           ))}
           <span className="order-bar__view-link">

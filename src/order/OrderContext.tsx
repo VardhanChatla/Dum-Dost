@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import { dishes } from '../data/dishes'
+import { addOns, dishes } from '../data/dishes'
 import type { Portion } from '../data/dishes'
 import { buildWhatsAppLink, orderSummaryMessage } from '../lib/whatsapp'
 import { dishPrice, lineItemKey, parseLineItemKey } from './lineItem'
@@ -8,6 +8,7 @@ import { OrderContext } from './order-context'
 
 export function OrderProvider({ children }: { children: ReactNode }) {
   const [quantities, setQuantities] = useState<Record<string, number>>({})
+  const [addOnQuantities, setAddOnQuantities] = useState<Record<string, number>>({})
   const [summaryOpen, setSummaryOpen] = useState(false)
 
   const addItem = (dishId: string, portion: Portion) => {
@@ -27,9 +28,27 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  const addAddOn = (addOnId: string) => {
+    setAddOnQuantities((prev) => ({ ...prev, [addOnId]: (prev[addOnId] ?? 0) + 1 }))
+  }
+
+  const removeAddOn = (addOnId: string) => {
+    setAddOnQuantities((prev) => {
+      const current = prev[addOnId] ?? 0
+      if (current <= 1) {
+        const next = { ...prev }
+        delete next[addOnId]
+        return next
+      }
+      return { ...prev, [addOnId]: current - 1 }
+    })
+  }
+
   const totalCount = useMemo(
-    () => Object.values(quantities).reduce((sum, qty) => sum + qty, 0),
-    [quantities],
+    () =>
+      Object.values(quantities).reduce((sum, qty) => sum + qty, 0) +
+      Object.values(addOnQuantities).reduce((sum, qty) => sum + qty, 0),
+    [quantities, addOnQuantities],
   )
 
   const totalPrice = useMemo(() => {
@@ -39,22 +58,29 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       const dish = dishes.find((d) => d.id === dishId)
       if (dish) sum += dishPrice(dish, portion) * qty
     }
+    for (const [addOnId, qty] of Object.entries(addOnQuantities)) {
+      const addOn = addOns.find((a) => a.id === addOnId)
+      if (addOn) sum += addOn.price * qty
+    }
     return sum
-  }, [quantities])
+  }, [quantities, addOnQuantities])
 
   const whatsAppLink = useMemo(
-    () => buildWhatsAppLink(orderSummaryMessage(dishes, quantities)),
-    [quantities],
+    () => buildWhatsAppLink(orderSummaryMessage(dishes, quantities, addOns, addOnQuantities)),
+    [quantities, addOnQuantities],
   )
 
   return (
     <OrderContext.Provider
       value={{
         quantities,
+        addOnQuantities,
         totalCount,
         totalPrice,
         addItem,
         removeItem,
+        addAddOn,
+        removeAddOn,
         whatsAppLink,
         summaryOpen,
         openSummary: () => setSummaryOpen(true),
