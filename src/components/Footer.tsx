@@ -10,6 +10,10 @@ export default function Footer() {
         </div>
         <p>Slow-cooked biryani, made by 3 friends. Order via WhatsApp.</p>
 
+        <a href="#terms" className="footer__terms-link">
+          Terms &amp; Conditions
+        </a>
+
         <p className="footer__copy">
           © {new Date().getFullYear()} Dum Dost. Made with dosti &amp; dum.
         </p>

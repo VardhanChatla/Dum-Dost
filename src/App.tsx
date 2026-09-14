@@ -9,6 +9,7 @@ import HowItWorks from './components/HowItWorks'
 import GroupOrders from './components/GroupOrders'
 import About from './components/About'
 import OrderCta from './components/OrderCta'
+import Terms from './components/Terms'
 import Footer from './components/Footer'
 import FloatingWhatsApp from './components/FloatingWhatsApp'
 import OrderBar from './components/OrderBar'
@@ -29,6 +30,7 @@ function App() {
             <GroupOrders />
             <About />
             <OrderCta />
+            <Terms />
           </main>
           <Footer />
           <FloatingWhatsApp />
