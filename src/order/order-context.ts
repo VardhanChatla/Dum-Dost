@@ -10,6 +10,10 @@ export interface OrderContextValue {
   removeItem: (lineKey: string) => void
   addAddOn: (addOnId: string) => void
   removeAddOn: (addOnId: string) => void
+  deliveryTime: string
+  setDeliveryTime: (value: string) => void
+  isDeliveryTimeValid: boolean
+  deliveryTimeLabel: string
   whatsAppLink: string
   summaryOpen: boolean
   openSummary: () => void

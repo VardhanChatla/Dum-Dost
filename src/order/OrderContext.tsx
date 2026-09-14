@@ -3,12 +3,14 @@ import type { ReactNode } from 'react'
 import { addOns, dishes } from '../data/dishes'
 import type { Portion } from '../data/dishes'
 import { buildWhatsAppLink, orderSummaryMessage } from '../lib/whatsapp'
+import { formatDeliveryTime, isDeliveryTimeValid as checkDeliveryTimeValid } from '../lib/deliveryTime'
 import { dishPrice, lineItemKey, parseLineItemKey } from './lineItem'
 import { OrderContext } from './order-context'
 
 export function OrderProvider({ children }: { children: ReactNode }) {
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [addOnQuantities, setAddOnQuantities] = useState<Record<string, number>>({})
+  const [deliveryTime, setDeliveryTime] = useState('')
   const [summaryOpen, setSummaryOpen] = useState(false)
 
   const addItem = (dishId: string, portion: Portion) => {
@@ -65,9 +67,15 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     return sum
   }, [quantities, addOnQuantities])
 
+  const isDeliveryTimeValid = checkDeliveryTimeValid(deliveryTime)
+  const deliveryTimeLabel = deliveryTime ? formatDeliveryTime(deliveryTime) : ''
+
   const whatsAppLink = useMemo(
-    () => buildWhatsAppLink(orderSummaryMessage(dishes, quantities, addOns, addOnQuantities)),
-    [quantities, addOnQuantities],
+    () =>
+      buildWhatsAppLink(
+        orderSummaryMessage(dishes, quantities, addOns, addOnQuantities, deliveryTimeLabel),
+      ),
+    [quantities, addOnQuantities, deliveryTimeLabel],
   )
 
   return (
@@ -81,6 +89,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         removeItem,
         addAddOn,
         removeAddOn,
+        deliveryTime,
+        setDeliveryTime,
+        isDeliveryTimeValid,
+        deliveryTimeLabel,
         whatsAppLink,
         summaryOpen,
         openSummary: () => setSummaryOpen(true),

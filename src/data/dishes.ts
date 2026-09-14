@@ -63,6 +63,7 @@ export const dishes: Dish[] = [
 export interface AddOn {
   id: string;
   name: string;
+  "wp-name": string;
   description: string;
   price: number;
 }
@@ -71,30 +72,35 @@ export const addOns: AddOn[] = [
   {
     id: "extra-raita",
     name: "Extra Raita",
+    "wp-name": "Extra Raita",
     description: "1 portion",
     price: 30,
   },
   {
     id: "extra-chicken-tikka-3pc",
     name: "Extra Chicken Tikka",
+    "wp-name": "Extra Chicken Tikka(3 pieces)",
     description: "3 pieces — ₹50",
     price: 50,
   },
   {
     id: "extra-chicken-tikka-6pc",
     name: "Extra Chicken Tikka",
+    "wp-name": "Extra Chicken Tikka(6 pieces)",
     description: "6 pieces — ₹90",
     price: 90,
   },
   {
     id: "extra-chicken-seekh-2pc",
     name: "Extra Chicken Seekh",
+    "wp-name": "Extra Chicken Seekh(2 pieces)",
     description: "2 pieces — ₹50",
     price: 50,
   },
   {
     id: "extra-chicken-seekh-5pc",
     name: "Extra Chicken Seekh",
+    "wp-name": "Extra Chicken Seekh(5 pieces)",
     description: "5 pieces — ₹125",
     price: 125,
   },

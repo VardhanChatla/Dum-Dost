@@ -1,14 +1,30 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { dishes } from '../data/dishes'
 import { useOrder } from '../order/useOrder'
 import { dishPrice, parseLineItemKey, portionLabel } from '../order/lineItem'
+import { getMinDeliveryDate, toDatetimeLocalValue, MIN_LEAD_MINUTES } from '../lib/deliveryTime'
 import { useRipple } from '../hooks/useRipple'
 import AddOns from './AddOns'
 
 export default function OrderSummaryModal() {
-  const { quantities, totalCount, totalPrice, addItem, removeItem, whatsAppLink, summaryOpen, closeSummary } =
-    useOrder()
+  const {
+    quantities,
+    totalCount,
+    totalPrice,
+    addItem,
+    removeItem,
+    deliveryTime,
+    setDeliveryTime,
+    isDeliveryTimeValid,
+    whatsAppLink,
+    summaryOpen,
+    closeSummary,
+  } = useOrder()
   const onRipple = useRipple()
+  const [showTimeError, setShowTimeError] = useState(false)
+  const deliveryInputRef = useRef<HTMLInputElement>(null)
+
+  const minDeliveryValue = toDatetimeLocalValue(getMinDeliveryDate())
 
   useEffect(() => {
     if (!summaryOpen) return
@@ -24,6 +40,12 @@ export default function OrderSummaryModal() {
       document.body.style.overflow = ''
     }
   }, [summaryOpen, closeSummary])
+
+  useEffect(() => {
+    if (summaryOpen && !deliveryTime) {
+      setDeliveryTime(toDatetimeLocalValue(getMinDeliveryDate()))
+    }
+  }, [summaryOpen, deliveryTime, setDeliveryTime])
 
   if (!summaryOpen) return null
 
@@ -65,6 +87,30 @@ export default function OrderSummaryModal() {
             </div>
           ) : (
             <>
+              <div className="delivery-section">
+                <h3 className="delivery-section__title">Delivery time</h3>
+                <p className="delivery-section__hint">
+                  We need at least {MIN_LEAD_MINUTES} minutes to prep & deliver — pick a time that works.
+                </p>
+                <input
+                  ref={deliveryInputRef}
+                  type="datetime-local"
+                  className={`delivery-input ${showTimeError && !isDeliveryTimeValid ? 'is-invalid' : ''}`}
+                  value={deliveryTime}
+                  min={minDeliveryValue}
+                  aria-label="Delivery date and time"
+                  onChange={(e) => {
+                    setDeliveryTime(e.target.value)
+                    setShowTimeError(false)
+                  }}
+                />
+                {showTimeError && !isDeliveryTimeValid && (
+                  <p className="delivery-section__error">
+                    Please choose a delivery time at least {MIN_LEAD_MINUTES} minutes from now.
+                  </p>
+                )}
+              </div>
+
               <div className="summary-card__list">
                 {lineItems.map(({ key, dish, portion, qty }) => {
                   const unitPrice = dishPrice(dish, portion)
@@ -110,6 +156,12 @@ export default function OrderSummaryModal() {
             onClick={(e) => {
               if (lineItems.length === 0) {
                 e.preventDefault()
+                return
+              }
+              if (!isDeliveryTimeValid) {
+                e.preventDefault()
+                setShowTimeError(true)
+                deliveryInputRef.current?.focus()
                 return
               }
               onRipple(e)

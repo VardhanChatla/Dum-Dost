@@ -16,6 +16,7 @@
   --whatsapp: #25d366;
   --addon: #2f4a35;
   --addon-strong: #253a2a;
+  --error: #c0392b;
   --shadow-soft: 0 20px 45px -20px rgba(43, 22, 10, 0.28);
   --shadow-card: 0 12px 30px -16px rgba(43, 22, 10, 0.22);
 
@@ -51,6 +52,7 @@
   --gold: #f2c572;
   --addon: #4c7a58;
   --addon-strong: #5d9169;
+  --error: #ff6b5b;
   --shadow-soft: 0 20px 50px -18px rgba(0, 0, 0, 0.6);
   --shadow-card: 0 16px 34px -18px rgba(0, 0, 0, 0.55);
 }

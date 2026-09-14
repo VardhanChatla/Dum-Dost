@@ -2,11 +2,21 @@ import { useEffect } from 'react'
 import { addOns, dishes } from '../data/dishes'
 import { useOrder } from '../order/useOrder'
 import { useRipple } from '../hooks/useRipple'
+import { useToast } from './useToast'
 import { parseLineItemKey, portionLabel } from '../order/lineItem'
 
 export default function OrderBar() {
-  const { quantities, addOnQuantities, totalCount, totalPrice, whatsAppLink, openSummary } = useOrder()
+  const {
+    quantities,
+    addOnQuantities,
+    totalCount,
+    totalPrice,
+    isDeliveryTimeValid,
+    whatsAppLink,
+    openSummary,
+  } = useOrder()
   const onRipple = useRipple()
+  const { showToast } = useToast()
 
   useEffect(() => {
     document.body.classList.toggle('has-order-bar', totalCount > 0)
@@ -61,7 +71,15 @@ export default function OrderBar() {
             href={whatsAppLink}
             target="_blank"
             rel="noreferrer"
-            onClick={onRipple}
+            onClick={(e) => {
+              if (!isDeliveryTimeValid) {
+                e.preventDefault()
+                openSummary()
+                showToast('Pick a delivery time', 'Select a date & time before sending your order.')
+                return
+              }
+              onRipple(e)
+            }}
           >
             <span className="material-symbols-outlined" aria-hidden="true">
               chat

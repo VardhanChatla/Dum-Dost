@@ -20,6 +20,7 @@ export function orderSummaryMessage(
   quantities: Record<string, number>,
   addOns: AddOn[] = [],
   addOnQuantities: Record<string, number> = {},
+  deliveryTimeLabel = "",
 ): string {
   const dishLines: string[] = [];
   let dishTotal = 0;
@@ -48,10 +49,14 @@ export function orderSummaryMessage(
 
     const lineTotal = addOn.price * qty;
     addOnTotal += lineTotal;
-    addOnLines.push(`• ${addOn.name} x${qty} — ₹${lineTotal}`);
+    addOnLines.push(`• ${addOn["wp-name"]} x${qty} — ₹${lineTotal}`);
   }
 
   const sections = [`Hi Dum Dost! I'd like to place this order:`, ``];
+
+  if (deliveryTimeLabel) {
+    sections.push(`*Delivery time :* ${deliveryTimeLabel}`, ``);
+  }
 
   if (dishLines.length > 0) {
     sections.push(
@@ -78,7 +83,9 @@ export function orderSummaryMessage(
     `*Overall total: ₹${dishTotal + addOnTotal}*`,
     `==========================`,
     ` `,
-    `Could you confirm availability & delivery details?`,
+    deliveryTimeLabel
+      ? `Could you please confirm this delivery time works?`
+      : `Could you confirm availability & delivery details?`,
   );
 
   return sections.join("\n");
