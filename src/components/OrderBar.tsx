@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { addOns, dishes } from '../data/dishes'
+import { addOns, dishes, freebies } from '../data/dishes'
 import { useOrder } from '../order/useOrder'
 import { useRipple } from '../hooks/useRipple'
 import { useToast } from './useToast'
@@ -9,8 +9,9 @@ export default function OrderBar() {
   const {
     quantities,
     addOnQuantities,
+    freebieQuantities,
     totalCount,
-    totalPrice,
+    grandTotal,
     isDeliveryTimeValid,
     whatsAppLink,
     openSummary,
@@ -42,6 +43,14 @@ export default function OrderBar() {
     })
     .filter((item): item is NonNullable<typeof item> => item !== null)
 
+  const freebieItems = Object.entries(freebieQuantities)
+    .filter(([, qty]) => qty > 0)
+    .map(([freebieId, qty]) => {
+      const freebie = freebies.find((f) => f.id === freebieId)
+      return freebie ? { freebieId, freebie, qty } : null
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+
   return (
     <div id="order-bar" className="order-bar">
       <div className="order-bar__inner">
@@ -56,6 +65,11 @@ export default function OrderBar() {
               {addOn.name} ×{qty}
             </span>
           ))}
+          {freebieItems.map(({ freebieId, freebie, qty }) => (
+            <span className="order-bar__chip order-bar__chip--freebie" key={freebieId}>
+              {freebie.name} ×{qty} <em>FREE</em>
+            </span>
+          ))}
           <span className="order-bar__view-link">
             View order <span className="material-symbols-outlined">north_east</span>
           </span>
@@ -64,7 +78,7 @@ export default function OrderBar() {
         <div className="order-bar__summary">
           <div className="order-bar__total">
             <span>{totalCount} item{totalCount > 1 ? 's' : ''}</span>
-            <strong>₹{totalPrice}</strong>
+            <strong>₹{grandTotal}</strong>
           </div>
           <a
             className="btn btn--primary ripple-btn"

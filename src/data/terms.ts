@@ -29,7 +29,7 @@ export const terms: TermItem[] = [
   {
     icon: "payments",
     title: "Delivery Charges",
-    text: "Applicable delivery charges, if any, will be communicated and confirmed at the time of placing the order.",
+    text: "A ₹50 delivery fee will be applicable on orders with a total value of less than ₹299. Orders of ₹299 or more will be eligible for free delivery.",
   },
   {
     icon: "support_agent",

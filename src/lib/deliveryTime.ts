@@ -1,5 +1,15 @@
 export const MIN_LEAD_MINUTES = 120;
 
+/** Formats a minute count as a human label, e.g. 120 -> "2 hours", 90 -> "1 hour 30 minutes". */
+export function formatLeadTime(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  const parts: string[] = [];
+  if (hours > 0) parts.push(`${hours} hour${hours === 1 ? "" : "s"}`);
+  if (mins > 0) parts.push(`${mins} minute${mins === 1 ? "" : "s"}`);
+  return parts.join(" ");
+}
+
 /** Earliest deliverable moment, rounded up to the next 5-minute mark. */
 export function getMinDeliveryDate(): Date {
   const date = new Date(Date.now() + MIN_LEAD_MINUTES * 60 * 1000);

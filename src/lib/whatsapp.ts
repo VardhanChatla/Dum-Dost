@@ -21,6 +21,9 @@ export function orderSummaryMessage(
   addOns: AddOn[] = [],
   addOnQuantities: Record<string, number> = {},
   deliveryTimeLabel = "",
+  deliveryFee = 0,
+  freebiesList: AddOn[] = [],
+  freebieQuantities: Record<string, number> = {},
 ): string {
   const dishLines: string[] = [];
   let dishTotal = 0;
@@ -52,6 +55,16 @@ export function orderSummaryMessage(
     addOnLines.push(`• ${addOn["wp-name"]} x${qty} — ₹${lineTotal}`);
   }
 
+  const freebieLines: string[] = [];
+
+  for (const [freebieId, qty] of Object.entries(freebieQuantities)) {
+    if (qty <= 0) continue;
+    const freebie = freebiesList.find((f) => f.id === freebieId);
+    if (!freebie) continue;
+
+    freebieLines.push(`• ${freebie["wp-name"]} x${qty} — FREE`);
+  }
+
   const sections = [`Hi Dum Dost! I'd like to place this order:`, ``];
 
   if (deliveryTimeLabel) {
@@ -78,9 +91,26 @@ export function orderSummaryMessage(
     );
   }
 
+  if (freebieLines.length > 0) {
+    sections.push(
+      `*Freebies (on the house!) :*`,
+      ...freebieLines,
+      `—————————————————————`,
+      `Free 200ml Coke included with your order — enjoy!`,
+      ``,
+    );
+  }
+
+  if (dishLines.length > 0 || addOnLines.length > 0) {
+    sections.push(
+      `*Delivery Fee:* ${deliveryFee > 0 ? `₹${deliveryFee}` : "Free"}`,
+      ``,
+    );
+  }
+
   sections.push(
     `==========================`,
-    `*Overall total: ₹${dishTotal + addOnTotal}*`,
+    `*Overall total: ₹${dishTotal + addOnTotal + deliveryFee}*`,
     `==========================`,
     ` `,
     deliveryTimeLabel

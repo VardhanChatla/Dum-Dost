@@ -4,8 +4,12 @@ import type { Portion } from '../data/dishes'
 export interface OrderContextValue {
   quantities: Record<string, number>
   addOnQuantities: Record<string, number>
+  /** Auto-managed — see FREEBIES_ENABLED in src/lib/freebieConfig.ts. Not user-addable/removable. */
+  freebieQuantities: Record<string, number>
   totalCount: number
   totalPrice: number
+  deliveryFee: number
+  grandTotal: number
   addItem: (dishId: string, portion: Portion) => void
   removeItem: (lineKey: string) => void
   addAddOn: (addOnId: string) => void

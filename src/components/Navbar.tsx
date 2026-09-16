@@ -3,6 +3,7 @@ import logo from '../assets/dum-dost-logo.png'
 import { buildWhatsAppLink, greetingMessage } from '../lib/whatsapp'
 import { useOrder } from '../order/useOrder'
 import { useRipple } from '../hooks/useRipple'
+import { FREEBIES_ENABLED } from '../lib/freebieConfig'
 import ThemeToggle from './ThemeToggle'
 
 const links = [
@@ -33,6 +34,15 @@ export default function Navbar() {
         </span>
         Fresh dum biryani, cooked to order &mdash; order a day ahead on WhatsApp
       </div>
+
+      {FREEBIES_ENABLED && (
+        <div className="announcement-bar announcement-bar--freebie">
+          <span className="material-symbols-outlined" aria-hidden="true">
+            local_bar
+          </span>
+          Limited time: get a FREE 200ml Coke with every order! 🎉
+        </div>
+      )}
 
       <div className="navbar__inner">
         <a href="#top" className="navbar__brand">

@@ -104,4 +104,29 @@ export const addOns: AddOn[] = [
     description: "5 pieces — ₹125",
     price: 125,
   },
+  {
+    id: "coke-200ml",
+    name: "Coke 200ml",
+    "wp-name": "Coke 200ml",
+    description: "Chilled — ₹20",
+    price: 20,
+  },
+];
+
+/** Id of the freebie auto-added to every order while `FREEBIES_ENABLED` (see `src/lib/freebieConfig.ts`) is on. */
+export const FREE_COKE_ID = "free-coke-200ml";
+
+/**
+ * Freebies category: items automatically included with an order at no charge
+ * (currently just the limited-time free Coke) rather than something the
+ * customer adds themselves like an add-on.
+ */
+export const freebies: AddOn[] = [
+  {
+    id: FREE_COKE_ID,
+    name: "Coke 200ml",
+    "wp-name": "Coke 200ml (Free)",
+    description: "On the house for a limited time!",
+    price: 0,
+  },
 ];
