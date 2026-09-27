@@ -1,28 +1,32 @@
-import { useReveal } from '../hooks/useReveal'
-import { useRipple } from '../hooks/useRipple'
-import { buildWhatsAppLink, greetingMessage } from '../lib/whatsapp'
+import { useReveal } from "../hooks/useReveal";
+import { useRipple } from "../hooks/useRipple";
+import {
+  buildWhatsAppLink,
+  greetingMessage,
+  WHATSAPP_NUMBER,
+} from "../lib/whatsapp";
 
 const steps = [
   {
-    icon: 'chat',
-    title: 'Message Us on WhatsApp',
-    text: 'Tell us what you\'re craving — Dum, Seekh or Tikka biryani — and how many boxes you need.',
+    icon: "chat",
+    title: "Message Us on WhatsApp",
+    text: "Tell us what you're craving — Dum, Seekh or Tikka biryani — and how many boxes you need.",
   },
   {
-    icon: 'task_alt',
-    title: 'We Confirm & Start Cooking',
-    text: 'We\'ll confirm price, quantity and timing, then get the pot on the stove.',
+    icon: "task_alt",
+    title: "We Confirm & Start Cooking",
+    text: "We'll confirm price, quantity and timing, then get the pot on the stove.",
   },
   {
-    icon: 'moped',
-    title: 'Hot Handoff',
-    text: 'Pickup or delivery, straight from the kitchen — sealed hot and ready to eat.',
+    icon: "moped",
+    title: "Hot Handoff",
+    text: "Pickup or delivery, straight from the kitchen — sealed hot and ready to eat.",
   },
-]
+];
 
 export default function HowItWorks() {
-  const ref = useReveal<HTMLDivElement>()
-  const onRipple = useRipple()
+  const ref = useReveal<HTMLDivElement>();
+  const onRipple = useRipple();
 
   return (
     <section id="how-it-works" className="how-it-works">
@@ -63,10 +67,10 @@ export default function HowItWorks() {
               </span>
               Chat on WhatsApp
             </a>
-            <span className="how-it-works__number">+91 99870 08585</span>
+            <span className="how-it-works__number">+91 {WHATSAPP_NUMBER}</span>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

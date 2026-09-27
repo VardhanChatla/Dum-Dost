@@ -7,6 +7,7 @@ import Menu from './components/Menu'
 import QualityPromise from './components/QualityPromise'
 import HowItWorks from './components/HowItWorks'
 import GroupOrders from './components/GroupOrders'
+import Community from './components/Community'
 import About from './components/About'
 import OrderCta from './components/OrderCta'
 import Terms from './components/Terms'
@@ -28,6 +29,7 @@ function App() {
             <QualityPromise />
             <HowItWorks />
             <GroupOrders />
+            <Community />
             <About />
             <OrderCta />
             <Terms />

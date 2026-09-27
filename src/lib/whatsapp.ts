@@ -1,7 +1,10 @@
 import type { AddOn, Dish } from "../data/dishes";
 import { dishPrice, parseLineItemKey, portionLabel } from "../order/lineItem";
 
-const WHATSAPP_NUMBER = "919987008585";
+export const WHATSAPP_NUMBER = "9185058586";
+
+export const WHATSAPP_COMMUNITY_LINK =
+  "https://chat.whatsapp.com/Dezgo95eGX0J2ShnrOzOjK";
 
 export function buildWhatsAppLink(message: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;

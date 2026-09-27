@@ -150,7 +150,7 @@ svg {
     var(--accent) 0%,
     var(--accent-strong) 100%
   );
-  color: #1a0f00;
+  color: #ffffff;
   box-shadow: 0 10px 24px -8px var(--accent-soft);
 }
 
